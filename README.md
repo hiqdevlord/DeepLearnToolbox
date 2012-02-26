@@ -1,36 +1,23 @@
 DeepLearnToolbox
-================
+=============
+Matlab toolbox for deep learning. 
 
-A Matlab toolbox for Deep Learning.
+Deep Learning is a machine learning subfield which focuses on learning deep hierarchical models of data. 
 
-Deep Learning is a new subfield of machine learning that focuses on learning deep hierarchical models of data.
-It is inspired by the human brain's apparent deep (layered, hierarchical) architecture.
-A good overview of the theory of Deep Learning theory is
-[Learning Deep Architectures for AI](http://www.iro.umontreal.ca/~bengioy/papers/ftml_book.pdf)
+Deep Learning is inspired by the human brains apparent deep (layered, hierarchical) architecture.
 
-For a more informal introduction, see the following videos by Geoffrey Hinton and Andrew Ng.
 
-* [The Next Generation of Neural Networks](http://www.youtube.com/watch?v=AyzOUbkUf3M) (Hinton, 2007)
-* [Recent Developments in Deep Learning](http://www.youtube.com/watch?v=VdIURAu1-aU) (Hinton, 2010)
-* [Unsupervised Feature Learning and Deep Learning](http://www.youtube.com/watch?v=ZmNOAtZIgIk) (Ng, 2011)
+Includes
+-------
+NN:   Feedforward Backprop Neural Nets.
 
-This toolbox includes:
-----------------------
+DBN:  Deep Belief Networks.
 
-NN:   A library for Feedforward Backprop Neural Networks
+CNN:  Convolutional Neural Networks.
 
-CNN:  A library for Convolutional Neural Networks
-
-DBN:  A library for Deep Belief Networks
-
-SAE:  A library for Stacked Auto-Encoders
-
-SPAE: A library for Stacked Convolutional Auto-Encoders
+SAE:  Stacked Auto-Encoders.
 
 Setup
 -------
 1. Download.
 2. addpath(genpath('DeepLearnToolbox'));
-
-Everything is work in progress
--------
