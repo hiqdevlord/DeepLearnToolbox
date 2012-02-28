@@ -1,10 +1,10 @@
-function nn = nntrain(nn, x, y, opts)
+function net = nntrain(net, x, y, opts)
     m = size(x,1);
     numbatches = m/opts.batchsize;
     if(rem(numbatches,1)~=0)
         error('numbatches not integer');
     end
-    nn.rL = [];
+    net.rL = [];
     n=1;
     for i=1:opts.numepochs
         kk = randperm(m);
@@ -18,24 +18,22 @@ function nn = nntrain(nn, x, y, opts)
             if(strcmp(class(batch_y),'uint8'))
                 batch_y = double(batch_y)/255;
             end
-            batch_x = batch_x.*(rand(size(batch_x))>nn.inl); %Add zero-mask noise (for DAE)
-            
-            nn = nnff(nn, batch_x, batch_y);
-            nn = nnbp(nn);
-            
-%             disp 'Performing numerical gradient checking ...';
-%             nnchecknumgrad(nn, x(i,:), y(i,:));
-%             disp 'No errors found ...';
-            
-            nn = nnapplygrads(nn);
-            if(isempty(nn.rL))
-                nn.rL(n) = nn.L;
+            net = nnff(net, batch_x, batch_y);
+    %             if(rand() < 1e-3)
+    %                 disp 'Performing numerical gradient checking ...';
+    %                 nnchecknumgrad(net, x(i,:), y(i,:));
+    %                 disp 'No errors found ...';
+    %             end
+            net = nnbp(net);
+            net = nnapplygrads(net);
+            if(isempty(net.rL))
+                net.rL(n) = net.L;
             end
-            nn.rL(n+1) = 0.99*nn.rL(n) + 0.01*nn.L;
+            net.rL(n+1) = 0.99*net.rL(n) + 0.01*net.L;
             n=n+1;
         end
-        t=toc;
-        disp(['epoch ' num2str(i) '/' num2str(opts.numepochs) '. Took ' num2str(t) ' seconds' '. Mean squared error is ' num2str(nn.rL(end))]);
+        toc;
+        disp(['epoch ' num2str(i) '/' num2str(opts.numepochs)]);
     end
 
 end
