@@ -15,7 +15,7 @@ opts.momentum  =   0;
 opts.alpha     =   1;
 dbn = dbnsetup(dbn, train_x, opts);
 dbn = dbntrain(dbn, train_x, opts);
-figure; visualize(dbn.rbm{1}.W', 1);   %  Visualize the RBM weights
+figure; visualize(dbn.rbm{1}.W', 1);   %  Visualize the RMB weights
 
 %%  ex2 train a 100-100-100 DBN and use its weights to initialize a NN
 dbn.sizes = [100 100 100];
@@ -28,8 +28,8 @@ dbn = dbntrain(dbn, train_x, opts);
 
 nn = dbnunfoldtonn(dbn, 10);
 
-nn.alpha  = 1;
-nn.lambda = 1e-4;
+nn.learningRate  = 1;
+nn.weightPenaltyL2 = 1e-4;
 opts.numepochs =  10;
 opts.batchsize = 100;
 
