@@ -43,9 +43,5 @@ end
 if nargout==1
     r=a;
 else
-    if exist('imshow')
-        imshow(a, [mm(1) mm(2)]);
-    else
-       imagesc(a, [mm(1) mm(2)]);
-    end
+    imshow(a, [mm(1) mm(2)]);
 end
