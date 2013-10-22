@@ -1,4 +1,3 @@
-
 DeepLearnToolbox
 ================
 
@@ -54,25 +53,9 @@ Setup
 1. Download.
 2. addpath(genpath('DeepLearnToolbox'));
 
-Known errors
+Everything is work in progress
 ------------------------------
 
-`test_cnn_gradients_are_numerically_correct` fails on Octave because of a bug in Octave's convn implementation. See http://savannah.gnu.org/bugs/?39314
-
-`test_example_CNN` fails in Octave for the same reason.
-
-`test_example_SAE` fails in Octave for unknown reasons.
-
-Contributing
-------------------------------
-1. Fork repository
-2. Create a new branch, e.g. `checkout -b my-stuff`
-3. Commit and push your changes to that branch
-4. Make sure that the test works (!) (see known errors)
-5. Create a pull request
-6. I accept your pull request
-
-I'll not accept pull requests introducing multiple independent changes at once, or pull requests that introduce new capabilities without accompanying tests.
 Example: Deep Belief Network
 ---------------------
 ```matlab
@@ -86,7 +69,7 @@ train_y = double(train_y);
 test_y  = double(test_y);
 
 %%  ex1 train a 100 hidden unit RBM and visualize its weights
-rand('state',0)
+rng(0);
 dbn.sizes = [100];
 opts.numepochs =   1;
 opts.batchsize = 100;
@@ -97,7 +80,7 @@ dbn = dbntrain(dbn, train_x, opts);
 figure; visualize(dbn.rbm{1}.W');   %  Visualize the RBM weights
 
 %%  ex2 train a 100-100 hidden unit DBN and use its weights to initialize a NN
-rand('state',0)
+rng(0);
 %train dbn
 dbn.sizes = [100 100];
 opts.numepochs =   1;
@@ -136,7 +119,7 @@ test_y  = double(test_y);
 
 %%  ex1 train a 100 hidden unit SDAE and use it to initialize a FFNN
 %  Setup and train a stacked denoising autoencoder (SDAE)
-rand('state',0)
+rng(0);
 sae = saesetup([784 100]);
 sae.ae{1}.activation_function       = 'sigm';
 sae.ae{1}.learningRate              = 1;
@@ -161,7 +144,7 @@ assert(er < 0.16, 'Too big error');
 
 %% ex2 train a 100-100 hidden unit SDAE and use it to initialize a FFNN
 %  Setup and train a stacked denoising autoencoder (SDAE)
-rand('state',0)
+rng(0);
 sae = saesetup([784 100 100]);
 sae.ae{1}.activation_function       = 'sigm';
 sae.ae{1}.learningRate              = 1;
@@ -210,7 +193,7 @@ test_y = double(test_y');
 %% ex1 Train a 6c-2s-12c-2s Convolutional neural network 
 %will run 1 epoch in about 200 second and get around 11% error. 
 %With 100 epochs you'll get around 1.2% error
-rand('state',0)
+rng(0)
 cnn.layers = {
     struct('type', 'i') %input layer
     struct('type', 'c', 'outputmaps', 6, 'kernelsize', 5) %convolution layer
@@ -253,7 +236,7 @@ test_y  = double(test_y);
 test_x = normalize(test_x, mu, sigma);
 
 %% ex1 vanilla neural net
-rand('state',0)
+rng(0);
 nn = nnsetup([784 100 10]);
 opts.numepochs =  1;   %  Number of full sweeps through data
 opts.batchsize = 100;  %  Take a mean gradient step over this many samples
@@ -263,8 +246,16 @@ opts.batchsize = 100;  %  Take a mean gradient step over this many samples
 
 assert(er < 0.08, 'Too big error');
 
+% Make an artificial one and verify that we can predict it
+x = zeros(1,28,28);
+x(:, 14:15, 6:22) = 1;
+x = reshape(x,1,28^2);
+figure; visualize(x');
+predicted = nnpredict(nn,x)-1;
+
+assert(predicted == 1);
 %% ex2 neural net with L2 weight decay
-rand('state',0)
+rng(0);
 nn = nnsetup([784 100 10]);
 
 nn.weightPenaltyL2 = 1e-4;  %  L2 weight decay
@@ -278,7 +269,7 @@ assert(er < 0.1, 'Too big error');
 
 
 %% ex3 neural net with dropout
-rand('state',0)
+rng(0);
 nn = nnsetup([784 100 10]);
 
 nn.dropoutFraction = 0.5;   %  Dropout fraction 
@@ -291,7 +282,7 @@ nn = nntrain(nn, train_x, train_y, opts);
 assert(er < 0.1, 'Too big error');
 
 %% ex4 neural net with sigmoid activation function
-rand('state',0)
+rng(0);
 nn = nnsetup([784 100 10]);
 
 nn.activation_function = 'sigm';    %  Sigmoid activation function
@@ -305,7 +296,7 @@ nn = nntrain(nn, train_x, train_y, opts);
 assert(er < 0.1, 'Too big error');
 
 %% ex5 plotting functionality
-rand('state',0)
+rng(0);
 nn = nnsetup([784 20 10]);
 opts.numepochs         = 5;            %  Number of full sweeps through data
 nn.output              = 'softmax';    %  use softmax output
@@ -324,7 +315,7 @@ tx = train_x(10001:end,:);
 vy   = train_y(1:10000,:);
 ty = train_y(10001:end,:);
 
-rand('state',0)
+rng(0);
 nn                      = nnsetup([784 20 10]);     
 nn.output               = 'softmax';                   %  use softmax output
 opts.numepochs          = 5;                           %  Number of full sweeps through data
@@ -334,7 +325,6 @@ nn = nntrain(nn, tx, ty, opts, vx, vy);                %  nntrain takes validati
 
 [er, bad] = nntest(nn, test_x, test_y);
 assert(er < 0.1, 'Too big error');
-
 ```
 
 
