@@ -53,9 +53,6 @@ Setup
 1. Download.
 2. addpath(genpath('DeepLearnToolbox'));
 
-Known errors
+Everything is work in progress
 ------------------------------
 
-`test_cnn_gradients_are_numerically_correct` fails on Octave because of a bug in Octave's convn implementation. See http://savannah.gnu.org/bugs/?39314
-
-`test_example_CNN` fails in Octave for the same reason.
